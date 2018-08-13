@@ -1,0 +1,17 @@
+CREATE TABLE bus(
+	bus_id VARCHAR(4) NOT NULL PRIMARY KEY,
+	lat FLOAT(10,6),
+	lng FLOAT(10,6)
+);
+
+
+
+INSERT INTO bus(bus_id, lat, lng) VALUES ('A001', -33.865143, 151.209900);       //insert watever value first
+INSERT INTO bus(bus_id, lat, lng) VALUES ('A002', -24.865143, 101.209900);       //update will not occur
+INSERT INTO bus(bus_id, lat, lng) VALUES ('A003', -66.865143, 124.209900); 	 //if the table is empty
+
+
+
+
+
+//Server link is ====>>>>>   localhost/server2.php?push&lat=33.1642&&lng=151.2099&&bus_id=A001
