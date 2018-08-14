@@ -19,13 +19,19 @@ public class login extends AppCompatActivity {
     private boolean flag1 = false;
     private boolean flag2 = false;
 
+    private EditText id_input;
+    private EditText bus_number_input;
+
+    private String driver_id;
+    private String bus_number;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        final EditText id_input = findViewById(R.id.txtDriverId);
-        final EditText bus_number_input = findViewById(R.id.txtBusNumber);
+        id_input = findViewById(R.id.txtDriverId);
+        bus_number_input = findViewById(R.id.txtBusNumber);
         final Button login_button = findViewById(R.id.btnLogIn);
         final TextView status_text =findViewById(R.id.lblLogInStatus);
 
@@ -74,6 +80,12 @@ public class login extends AppCompatActivity {
                 status_text.setText("Attempt to log in");
                 if (flag1 && flag2){
                     status_text.setText("Log in successful");
+
+                    //obtain valid inputs and pass them to next activity
+                    driver_id = id_input.getText().toString();
+                    bus_number = bus_number_input.getText().toString();
+                    sendValuesToNextActivity();
+
                     login2push();
                 }
                 Log.d(DebugTag, "log in button pressed");
@@ -86,14 +98,14 @@ public class login extends AppCompatActivity {
         Intent intent = new Intent(this, push.class);
         startActivity(intent);
     }
-/*
+
     public void sendValuesToNextActivity(){
-        Intent intent = new Intent(Nexttopic.this, Quesans.class);
-        String name = getIntent().getStringExtra("name");
-        intent.putExtra("TopicName", tname);
-        intent.putExtra("Topicid", topicid);
-        startActivity(intent);
+        Intent passIntent = new Intent(login.this, push.class);
+        //String name = getIntent().getStringExtra("name");
+        passIntent.putExtra("driver_id", driver_id);
+        passIntent.putExtra("bus_number", bus_number);
+        startActivity(passIntent);
     }
-    */
+
 }
 

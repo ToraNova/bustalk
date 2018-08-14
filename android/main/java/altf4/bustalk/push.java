@@ -50,21 +50,15 @@ public class push extends AppCompatActivity implements View.OnClickListener{
     private Runnable runnableCode;
 
     String url = "http://192.168.0.128/bustalk/post.php";
-    //RequestQueue MyRequestQueue = Volley.newRequestQueue(this);
 
     private Location currentLocation;
     private double longitude;
     private double latitude;
-    private StringBuffer result;
 
     //-------------------------------------------------------------------------------------------------
     //Timer declares
     //-------------------------------------------------------------------------------------------------
-    private Timer timer;
-    private TimerTask task;
-    private Handler task_handler;
     private Handler handler;
-    private Runnable runnable;
 
     //-------------------------------------------------------------------------------------------------
     //Location declares
@@ -80,6 +74,13 @@ public class push extends AppCompatActivity implements View.OnClickListener{
         //set view upon entering this interface
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_push);
+
+        //receive values from previous activity
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        String driver_id= bundle.getString("driver_id");
+        String bus_number= bundle.getString("bus_number");
+        Log.d(DebugTag, "Driver id: " + driver_id + "\nBus number: " + bus_number);
 
         status = findViewById(R.id.lblOutputStatus);
 
@@ -137,11 +138,7 @@ public class push extends AppCompatActivity implements View.OnClickListener{
         stop.setOnClickListener(this);
         logout_button.setOnClickListener(this);
 
-        //initialise timer, timer task and handler
-        //task_handler = new Handler();
-
         Log.d(DebugTag, "Interface creation complete");
-
     }
 
     //return to log in screen
@@ -162,28 +159,7 @@ public class push extends AppCompatActivity implements View.OnClickListener{
                 break;
             case R.id.btnSend:
                 Log.d(DebugTag, "starting location sender");
-                /*
-                //FROM HERE
-                currentLocation = getLastKnownLocation(); //DO THIS FIRST
-                /*currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                longitude = currentLocation.getLongitude();
-                latitude = currentLocation.getLatitude();
-                status.setText("Your Location is - \nLat: " +
-                        latitude + "\nLong: " + longitude);*/
-                /*
-                if(currentLocation == null){
-                    Log.d(DebugTag,"currentLocation is NULL on starting send");
-                }else{
-                    longitude = currentLocation.getLongitude(); //THEN THIS
-                    latitude = currentLocation.getLatitude(); //THEN THIS
-                    status.setText("Your Location is - \nLat: " +
-                            latitude + "\nLong: " + longitude);
-                    String testURL = "http://10.100.19.76/server.php?push=1&lat=" + Double.toString(latitude) +
-                            "&lng=" + Double.toString(longitude) + "&bus_id=A003";
-                    new NetworkManager().execute(testURL); //THIS IS THE PUSH LINE
-                }
-                */
-                //startTimer();
+
                 handler = new Handler();
                 runnableCode = new Runnable() {
                     @Override
@@ -194,14 +170,12 @@ public class push extends AppCompatActivity implements View.OnClickListener{
                         handler.postDelayed(runnableCode, period);
                     }
                 };
-// Start the initial runnable task by posting through the handler
+                // Start the initial runnable task by posting through the handler
                 handler.post(runnableCode);
-                //TO HERE
                 break;
             case R.id.btnStop:
                 Log.d(DebugTag, "stopping location sender");
                 handler.removeCallbacks(runnableCode);
-                //stopTimer();
         }
     }
 
@@ -309,11 +283,7 @@ public class push extends AppCompatActivity implements View.OnClickListener{
 
     private void SendLocation(){
         currentLocation = getLastKnownLocation();
-                /*currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                longitude = currentLocation.getLongitude();
-                latitude = currentLocation.getLatitude();
-                status.setText("Your Location is - \nLat: " +
-                        latitude + "\nLong: " + longitude);*/
+
         if(currentLocation == null){
             Log.d(DebugTag,"currentLocation is NULL on starting send");
         }else{
