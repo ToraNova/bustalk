@@ -8,9 +8,8 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Network;
 import android.os.AsyncTask;
-import android.os.Debug;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -22,43 +21,26 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.URL;
 import java.net.HttpURLConnection;
 import java.util.List;
-import java.io.IOException;
-
-//timer imports
-import java.util.Timer;
-import java.util.TimerTask;
-import android.os.Handler;
 
 public class push extends AppCompatActivity implements View.OnClickListener{
     //declaration of variables and constants
     public static final String DebugTag = "DEV_PUSH_DEBUG_MSG";
-    static final int delay = 0;
     static final int period = 3000;
     public int count = 0;
+    public String driver_id = "";
+    public String bus_number = "";
 
     private TextView status;
-
     private Runnable runnableCode;
-
-    String url = "http://192.168.0.128/bustalk/post.php";
-
+    private Handler handler;
     private Location currentLocation;
     private double longitude;
     private double latitude;
-
-    //-------------------------------------------------------------------------------------------------
-    //Timer declares
-    //-------------------------------------------------------------------------------------------------
-    private Handler handler;
 
     //-------------------------------------------------------------------------------------------------
     //Location declares
@@ -78,13 +60,16 @@ public class push extends AppCompatActivity implements View.OnClickListener{
         //receive values from previous activity
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-        String driver_id= bundle.getString("driver_id");
-        String bus_number= bundle.getString("bus_number");
-        Log.d(DebugTag, "Driver id: " + driver_id + "\nBus number: " + bus_number);
+        driver_id = bundle.getString("driver_id");
+        bus_number = bundle.getString("bus_number");
+        Log.d(DebugTag, "Driver id: " + driver_id + "\t\t\tBus number: " + bus_number);
 
+        //map xml to java
         status = findViewById(R.id.lblOutputStatus);
 
+        //obtain location service
         locationManager = (LocationManager)this.getSystemService(LOCATION_SERVICE);
+
         //-------------------------------------------------------------------------------------------------
         //PERMISSION CHECKING -----------------------------------------------------------------------------
         //-------------------------------------------------------------------------------------------------
@@ -141,7 +126,7 @@ public class push extends AppCompatActivity implements View.OnClickListener{
         Log.d(DebugTag, "Interface creation complete");
     }
 
-    //return to log in screen
+    //return to previous screen (log out)
     public void open_logout() {
         Intent intent = new Intent(this, login.class);
         startActivity(intent);
@@ -150,23 +135,23 @@ public class push extends AppCompatActivity implements View.OnClickListener{
     //triggered when a button is clicked
     @Override
     public void onClick(View v) {
-
-        //final TextView status = findViewById(R.id.lblOutputStatus);
-
         switch (v.getId()){
             case R.id.btnLogOut:
+                //if log out button is clicked
                 LogOut();
                 break;
             case R.id.btnSend:
+                //if send button is clicked
                 Log.d(DebugTag, "starting location sender");
 
+                //send location repeatedly with fixed duration until stop button is clicked
                 handler = new Handler();
                 runnableCode = new Runnable() {
                     @Override
                     public void run() {
                         Log.d(DebugTag, "Repeating, count = " + count++);
                         SendLocation();
-                        // Repeat this the same runnable code block again another 2 seconds
+                        // Repeat this the same runnable code block every 3s
                         handler.postDelayed(runnableCode, period);
                     }
                 };
@@ -174,12 +159,12 @@ public class push extends AppCompatActivity implements View.OnClickListener{
                 handler.post(runnableCode);
                 break;
             case R.id.btnStop:
+                //if stop button is clicked, stop location update
                 Log.d(DebugTag, "stopping location sender");
                 handler.removeCallbacks(runnableCode);
         }
     }
 
-    //log out when "LOG OUT" button is clicked
     public void LogOut(){
 
         final TextView status = findViewById(R.id.lblOutputStatus);
@@ -209,8 +194,7 @@ public class push extends AppCompatActivity implements View.OnClickListener{
         }
     }
 
-    public boolean checkLocationPermission()
-    {
+    public boolean checkLocationPermission() {
         String permission1 = "android.permission.ACCESS_FINE_LOCATION";
         String permission2 = "android.permission.INTERNET";
         int res1 = this.checkCallingOrSelfPermission(permission1);
@@ -281,22 +265,25 @@ public class push extends AppCompatActivity implements View.OnClickListener{
         return bestLocation;
     }
 
+    //send latest location to web server
     private void SendLocation(){
         currentLocation = getLastKnownLocation();
 
         if(currentLocation == null){
             Log.d(DebugTag,"currentLocation is NULL on starting send");
         }else{
-            longitude = currentLocation.getLongitude(); //THEN THIS
-            latitude = currentLocation.getLatitude(); //THEN THIS
+            longitude = currentLocation.getLongitude();
+            latitude = currentLocation.getLatitude();
             status.setText("Your Location is - \nLat: " +
                     latitude + "\nLong: " + longitude);
-            String testURL = "http://10.100.19.76/server.php?push=1&lat=" + Double.toString(latitude) +
-                    "&lng=" + Double.toString(longitude) + "&bus_id=A003";
+            String startURL = "http://10.100.19.76/server.php";
+            String testURL = startURL + "?push=1&lat=" + Double.toString(latitude) +
+                    "&lng=" + Double.toString(longitude) + "&bus_id=A" + bus_number + "&driver_id=" + driver_id;
             new NetworkManager().execute(testURL); //THIS IS THE PUSH LINE
         }
     }
 
+    //HTTP GET
     class NetworkManager extends AsyncTask<String,Void,String>{
         protected String doInBackground(String ...strings){
             String get_result = "";
