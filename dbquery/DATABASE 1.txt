@@ -1,0 +1,30 @@
+CREATE TABLE bus(
+	bus_id VARCHAR(4) NOT NULL PRIMARY KEY,
+	lat FLOAT(10,6),
+	lng FLOAT(10,6)
+);
+
+DELIMITER $$
+CREATE TRIGGER `After_location_update`
+AFTER UPDATE ON bustalk.bus
+FOR EACH ROW BEGIN
+	INSERT INTO bus_log (bus_id, lat, lng, time) VALUES (NEW.bus_id, NEW.lat, NEW.lng, NOW());
+END$$
+DELIMITER ;
+
+
+CREATE TABLE bus_log(
+	log_id INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	bus_id VARCHAR(4),
+	lat FLOAT(10,6),
+	lng FLOAT(10,6),
+	time TIMESTAMP
+);
+
+INSERT INTO bus(bus_id, lat, lng) VALUES ('A001', -33.865143, 151.209900)
+
+
+//Update the table
+UPDATE bus
+SET lat = -34.865143, lng = 152.209900
+WHERE bus_id = 'A001'

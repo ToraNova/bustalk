@@ -1,0 +1,44 @@
+CREATE TABLE bus(
+	bus_id CHAR(4) NOT NULL PRIMARY KEY
+);
+
+CREATE TABLE driver(
+	driver_id CHAR(4) NOT NULL PRIMARY KEY
+);
+
+CREATE TABLE active_bus(
+	log_id INT(10) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	bus_id CHAR(4),
+	driver_id CHAR(4),
+	lat FLOAT(10,6) NOT NULL DEFAULT 0.0,
+	lng FLOAT(10,6) NOT NULL DEFAULT 0.0,
+	CONSTRAINT FK_Bus FOREIGN KEY (bus_id) REFERENCES bus(bus_id) ON DELETE CASCADE,
+	CONSTRAINT FK_Driver FOREIGN KEY (driver_id) REFERENCES driver(driver_id) ON DELETE CASCADE,
+	CONSTRAINT UNIQUE KEY `one_bus` (bus_id),
+	CONSTRAINT UNIQUE KEY `one_driver`(driver_id)
+);
+
+//FILLING THE DATABASE
+1) BUS
+2) DRIVER
+3) INSERT NEW VALUES INTO ACTIVE BUS
+4) UPDATING VALUES IN ACTIVE BUS
+5) REMOVE VALUES FROM ACTIVE BUS
+
+
+INSERT INTO bus (`bus_id`) 
+VALUES ('B300'), ('B029');
+
+INSERT INTO driver (`driver_id`) 
+VALUES ('D001'), ('D123');
+
+INSERT INTO active_bus (bus_id, driver_id) 
+VALUES ('B300', 'D123');
+
+UPDATE active_bus
+SET lat = X, lng = Y
+WHERE bus_id = 'X' AND driver_id = 'Y';
+
+DELETE FROM active_bus
+WHERE bus_id='X' AND driver_id = 'Y' ;
+https://daveismyname.blog/delete-rows-from-a-mysql-database-with-a-confirmation
