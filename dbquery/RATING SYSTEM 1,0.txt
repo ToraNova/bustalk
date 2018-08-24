@@ -1,0 +1,19 @@
+//RATING SYSTEM
+
+CREATE TABLE bus(
+	bus_id CHAR(4) NOT NULL PRIMARY KEY
+);
+
+CREATE TABLE bus_rating(
+	rating_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+	bus_id CHAR(4),
+	bus_rating INT,
+	CONSTRAINT FK_Rating FOREIGN KEY (bus_id) REFERENCES bus(bus_id) ON DELETE CASCADE
+);
+
+SELECT bus_id FROM bus
+WHERE bus_id = <bus_id>
+
+INSERT INTO bus_rating (bus_id, rating) 
+VALUES (<bus_id>, <rating>)
+	
