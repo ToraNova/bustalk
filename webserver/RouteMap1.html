@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <title></title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.mapbox.com/mapbox.js/v3.0.1/mapbox.js'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox.js/v3.0.1/mapbox.css' rel='stylesheet' />
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+    body {
+      margin: 0;
+      padding: 0;
+	}
+
+    #map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+	}
+		
+	.marker {
+		display: block;
+		border: none;
+		border-radius: 100%;
+		cursor: pointer;
+		padding: 0;
+	}
+	
+	.mapboxgl-popup {
+		max-width: 200px;
+	}
+
+	.mapboxgl-popup-content {
+		text-align: center;
+		font-family: 'Open Sans', sans-serif;
+	}
+	
+	#home {
+        display: block;
+        position: relative;
+        margin: 0px auto;
+        width: 20%;
+        height: 40px;
+        padding: 10px;
+        border: none;
+        border-radius: 3px;
+        font-size: 15px;
+        text-align: center;
+        color: #fff;
+        background: #ee8a65;
+    }
+		
+    </style>
+	</head>
+	<body>
+    <div id='map'></div>
+	<br/>
+	<button id='home'>Main Menu</button>
+    <script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoibWFob29vIiwiYSI6ImNqbHFseXA4azJoYWgza3Bhd3FzaWpuZHAifQ.O532of12sEIruld9BlMhsQ';
+	//Initialize map 
+	var map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/light-v9',
+      center: [101.6421, 2.9276],
+      zoom: 14.5
+    });
+	
+	//Home Button
+	document.getElementById('home').addEventListener('click', function () {
+		window.location = "http://www.google.com/"
+	});
+	
+	//Main function
+	map.on('load', function() {
+		getRoute();
+		getRoute2();
+		getRoute3();
+		getRoute4();
+		getRoute5();
+		getRoute6();
+	});
+	
+	//NO.1
+	function getRoute() {
+		var start = [101.651565, 2.921409];
+		var end = [101.650216,2.916961];
+		var directionsRequest = 'https://api.mapbox.com/directions/v5/mapbox/driving/' + start[0] + ',' + start[1] + ';' + end[0] + ',' + end[1] + '?geometries=geojson&access_token=' + mapboxgl.accessToken;
+		$.ajax({
+			method: 'GET',
+			url: directionsRequest,
+		}).done(function(data) {
+		var route = data.routes[0].geometry;
+		map.addLayer({
+		  id: 'route',
+		  type: 'line',
+		  source: {
+			type: 'geojson',
+			data: {
+			  type: 'Feature',
+			  geometry: route
+			}
+		  },
+		  paint: {
+			'line-width': 5,
+			'line-color': 'hsl(211, 100%, 59%)',
+			'line-opacity': 0.5
+		  }
+		});
+		map.addLayer({
+		  id: 'routearrows',
+		  type: 'symbol',
+		  source: 'route',
+		  layout: {
+			'symbol-placement': 'line',
+			'text-field': '▶',
+			'text-size': {
+			  base: 1,
+			  stops: [[12, 24], [22, 60]]
+			},
+			'symbol-spacing': {
+			  base: 1,
+			  stops: [[12, 30], [22, 160]]
+			},
+			'text-keep-upright': false
+		  },
+		  paint: {
+			'text-color': '#3887be',
+			'text-halo-color': 'hsl(55, 11%, 96%)',
+			'text-halo-width': 5
+		  }
+		}, 'waterway-label');
+		  });
+		}
+	//NO.2
+	function getRoute2() {
+			var start = [101.650216,2.916961];
+			var end = [101.640818, 2.922327];
+			var directionsRequest2 = 'https://api.mapbox.com/directions/v5/mapbox/cycling/' + start[0] + ',' + start[1] + ';' + end[0] + ',' + end[1] + '?geometries=geojson&access_token=' + mapboxgl.accessToken;
+			$.ajax({
+				method: 'GET',
+				url: directionsRequest2,
+			}).done(function(data) {
+			var route2 = data.routes[0].geometry;
+			map.addLayer({
+			  id: 'route2',
+			  type: 'line',
+			  source: {
+				type: 'geojson',
+				data: {
+				  type: 'Feature',
+				  geometry: route2
+				}
+			  },
+			  paint: {
+				'line-width': 5,
+				'line-color': 'hsl(211, 100%, 59%)',
+				'line-opacity': 0.5
+			  }
+			});			
+			map.addLayer({
+			  id: 'routearrows2',
+			  type: 'symbol',
+			  source: 'route2',
+			  layout: {
+				'symbol-placement': 'line',
+				'text-field': '▶',
+				'text-size': {
+				  base: 1,
+				  stops: [[12, 24], [22, 60]]
+				},
+				'symbol-spacing': {
+				  base: 1,
+				  stops: [[12, 30], [22, 160]]
+				},
+				'text-keep-upright': false
+			  },
+			  paint: {
+				'text-color': '#3887be',
+				'text-halo-color': 'hsl(55, 11%, 96%)',
+				'text-halo-width': 5
+			  }
+			}, 'waterway-label');
+			  });
+			}
+			
+	//NO.3
+	function getRoute3() {
+		var start = [101.640818, 2.922327];
+		var end = [101.637524, 2.925156];
+		var directionsRequest3 = 'https://api.mapbox.com/directions/v5/mapbox/cycling/' + start[0] + ',' + start[1] + ';' + end[0] + ',' + end[1] + '?geometries=geojson&access_token=' + mapboxgl.accessToken;
+		$.ajax({
+			method: 'GET',
+			url: directionsRequest3,
+		}).done(function(data) {
+		var route3 = data.routes[0].geometry;
+		map.addLayer({
+				id: 'route3',
+				type: 'line',
+			source: {
+				type: 'geojson',
+				data: {
+				type: 'Feature',
+				geometry: route3
+				}
+			  },
+			  paint: {
+				'line-width': 5,
+				'line-color': 'hsl(211, 100%, 59%)',
+				'line-opacity': 0.5
+			  }
+			});
+			map.addLayer({
+			  id: 'routearrows3',
+			  type: 'symbol',
+			  source: 'route3',
+			  layout: {
+				'symbol-placement': 'line',
+				'text-field': '▶',
+				'text-size': {
+				  base: 1,
+				  stops: [[12, 24], [22, 60]]
+				},
+				'symbol-spacing': {
+				  base: 1,
+				  stops: [[12, 30], [22, 160]]
+				},
+				'text-keep-upright': false
+			  },
+			  paint: {
+				'text-color': '#3887be',
+				'text-halo-color': 'hsl(55, 11%, 96%)',
+				'text-halo-width': 5
+			  }
+			}, 'waterway-label');
+			  });
+		}
+		
+		//NO.4
+		function getRoute4() {
+			var start = [101.637524, 2.925156];
+			var end = [101.643039, 2.933181];
+			var directionsRequest4 = 'https://api.mapbox.com/directions/v5/mapbox/cycling/' + start[0] + ',' + start[1] + ';' + end[0] + ',' + end[1] + '?geometries=geojson&access_token=' + mapboxgl.accessToken;
+			$.ajax({
+				method: 'GET',
+				url: directionsRequest4,
+			}).done(function(data) {
+			var route4 = data.routes[0].geometry;
+			map.addLayer({
+			  id: 'route4',
+			  type: 'line',
+			  source: {
+				type: 'geojson',
+				data: {
+				  type: 'Feature',
+				  geometry: route4
+				}
+			  },
+			  paint: {
+				'line-width': 5,
+				'line-color': 'hsl(211, 100%, 59%)',
+				'line-opacity': 0.5
+			  }
+			});			
+			map.addLayer({
+			  id: 'routearrows4',
+			  type: 'symbol',
+			  source: 'route4',
+			  layout: {
+				'symbol-placement': 'line',
+				'text-field': '▶',
+				'text-size': {
+				  base: 1,
+				  stops: [[12, 24], [22, 60]]
+				},
+				'symbol-spacing': {
+				  base: 1,
+				  stops: [[12, 30], [22, 160]]
+				},
+				'text-keep-upright': false
+			  },
+			  paint: {
+				'text-color': '#3887be',
+				'text-halo-color': 'hsl(55, 11%, 96%)',
+				'text-halo-width': 5
+			  }
+			}, 'waterway-label');
+			  });
+			}
+			
+			//NO.5
+		function getRoute5() {
+			var start = [101.643039, 2.933181];
+			var end = [101.663361, 2.941429];	
+			var directionsRequest5 = 'https://api.mapbox.com/directions/v5/mapbox/cycling/' + start[0] + ',' + start[1] + ';' + end[0] + ',' + end[1] + '?geometries=geojson&access_token=' + mapboxgl.accessToken;
+			$.ajax({
+				method: 'GET',
+				url: directionsRequest5,
+			}).done(function(data) {
+			var route5 = data.routes[0].geometry;
+			map.addLayer({
+			  id: 'route5',
+			  type: 'line',
+			  source: {
+				type: 'geojson',
+				data: {
+				  type: 'Feature',
+				  geometry: route5
+				}
+			  },
+			  paint: {
+				'line-width': 5,
+				'line-color': 'hsl(211, 100%, 59%)',
+				'line-opacity': 0.5
+			  }
+			});			
+			map.addLayer({
+			  id: 'routearrows5',
+			  type: 'symbol',
+			  source: 'route5',
+			  layout: {
+				'symbol-placement': 'line',
+				'text-field': '▶',
+				'text-size': {
+				  base: 1,
+				  stops: [[12, 24], [22, 60]]
+				},
+				'symbol-spacing': {
+				  base: 1,
+				  stops: [[12, 30], [22, 160]]
+				},
+				'text-keep-upright': false
+			  },
+			  paint: {
+				'text-color': '#3887be',
+				'text-halo-color': 'hsl(55, 11%, 96%)',
+				'text-halo-width': 5
+			  }
+			}, 'waterway-label');
+			  });
+			}
+			
+		//NO.6
+		function getRoute6() {
+			var start = [101.663361, 2.941429];
+			var end = [101.651565, 2.921409];
+			var directionsRequest6 = 'https://api.mapbox.com/directions/v5/mapbox/cycling/' + start[0] + ',' + start[1] + ';' + end[0] + ',' + end[1] + '?geometries=geojson&access_token=' + mapboxgl.accessToken;
+			$.ajax({
+				method: 'GET',
+				url: directionsRequest6,
+			}).done(function(data) {
+			var route6 = data.routes[0].geometry;
+			map.addLayer({
+			  id: 'route6',
+			  type: 'line',
+			  source: {
+				type: 'geojson',
+				data: {
+				  type: 'Feature',
+				  geometry: route6
+				}
+			  },
+			  paint: {
+				'line-width': 5,
+				'line-color': 'hsl(211, 100%, 59%)',
+				'line-opacity': 0.5
+			  }
+			});
+			map.addLayer({
+			  id: 'routearrows6',
+			  type: 'symbol',
+			  source: 'route6',
+			  layout: {
+				'symbol-placement': 'line',
+				'text-field': '▶',
+				'text-size': {
+				  base: 1,
+				  stops: [[12, 24], [22, 60]]
+				},
+				'symbol-spacing': {
+				  base: 1,
+				  stops: [[12, 30], [22, 160]]
+				},
+				'text-keep-upright': false
+			  },
+			  paint: {
+				'text-color': '#3887be',
+				'text-halo-color': 'hsl(55, 11%, 96%)',
+				'text-halo-width': 5
+			  }
+			}, 'waterway-label');
+			  });
+			}	
+	var geojson = {
+		"type": "FeatureCollection",
+		"features": [
+			{
+				"type": "Feature",
+				"properties": {
+				"title": 'Cyberjaya Transport Terminal',
+				"description": '',
+                "iconSize": [48, 48]
+            },
+				"geometry": {
+                "type": "Point",
+                "coordinates": [101.651565, 2.9215]
+            }
+        },
+		{
+				"type": "Feature",
+				"properties": {
+				"title": 'Lingkaran Cyberpoint',
+				"description": 'Neo Cyber',
+                "iconSize": [48, 48]
+            },
+				"geometry": {
+                "type": "Point",
+                "coordinates": [101.650216, 2.916961]
+            }
+        },
+		{
+				"type": "Feature",
+				"properties": {
+				"title": 'Persiaran Multimedia',
+				"description": 'Cyberia Crescent',
+                "iconSize": [48, 48]
+            },
+				"geometry": {
+                "type": "Point",
+                "coordinates": [101.640818, 2.922327]	
+            }
+        },
+		{
+				"type": "Feature",
+				"properties": {
+				"title": 'Persiaran Bestari',
+				"description": 'Cyberia',
+                "iconSize": [48, 48]
+            },
+				"geometry": {
+                "type": "Point",
+                "coordinates": [101.637524, 2.925156]
+            }
+        },
+		{
+				"type": "Feature",
+				"properties": {
+				"title": 'Persiaran Semarak Api',
+				"description": 'TM Point', 			
+                "iconSize": [48, 48]
+            },
+				"geometry": {
+                "type": "Point",
+                "coordinates": [101.643039, 2.933181]
+            }
+        },
+		{
+				"type": "Feature",
+				"properties": {
+				"title": 'Jalan Teknokrat 1 & 2',
+				"description": 'Lim Kok Wing University, MAMPU',
+                "iconSize": [48, 48]
+            },
+				"geometry": {
+                "type": "Point",
+                "coordinates": [101.663361, 2.941429]
+            }
+        }
+		]
+	};
+
+	//48x48 (https://i.imgur.com/eStTf13.png)
+	//32x32(https://i.imgur.com/SmwKeUI.png)
+	
+	geojson.features.forEach(function(marker) {
+    // create a DOM element for the marker
+    var el = document.createElement('div');
+    el.className = 'marker';
+    el.style.backgroundImage = 'url(https://i.imgur.com/eStTf13.png)';
+    el.style.width = marker.properties.iconSize[0] + 'px';
+    el.style.height = marker.properties.iconSize[1] + 'px';
+	
+    // add marker to map
+    new mapboxgl.Marker(el)
+        .setLngLat(marker.geometry.coordinates)
+		.setLngLat(marker.geometry.coordinates)
+		.setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+		.setHTML('<h3>' + marker.properties.title + '</h3><p>' + marker.properties.description + '</p>'))
+        .addTo(map);
+});
+    </script>
+  </body>
+</html>
