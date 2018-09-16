@@ -1,0 +1,29 @@
+//1) Route T520
+
+1 Cyberjaya Transport Terminal									[101.652016, 2.920990]
+2 LINGKARAN CYBERPOINT 1 (Neo Cyber)							[101.650216, 2.916961]
+3 PERSIARAN MULTIMEDIA (Cyberia Crescent) 						[101.640818, 2.922327]
+4 PERSIARAN BESTARI (Cyberia) 									[101.637524, 2.925156]
+5 PERSIARAN SEMARAK API (TM Point) 								[101.643039, 2.933181]
+6 JALAN TEKNOKRAT 1 & 2 (Lim Kok Wing University, MAMPU) 		[101.663361, 2.941429]
+7 Cyberjaya Transport Terminal									[101.652016, 2.920990]
+
+//2) Route T521
+
+1 Cyberjaya Transport Terminal									[101.652016, 2.920990]
+2 Persiaran Bestari (Tamarind Square)							[101.637775, 2.920939]
+3 Persiaran Ceria (LHDN)	 									[101.649654, 2.908222]
+4 Persiaran APEC (MaGIC, Kirkby International College) 			[101.656022, 2.910451]
+5 Jalan Teknokrat 6 (Hotel Tan’yaa)								[101.655443, 2.920707]
+6 Persiaran Semarak Api (Cyberjaya Lake Garden)					[101.642980, 2.933194]
+7 Cyberjaya Transport Terminal									[101.652016, 2.920990]
+
+//3 Route 
+
+1 Persiaran Bestari (Cyberia)									[101.637685, 2.925280]
+2 Persiaran Multimedia (MMU) 									[101.642840, 2.922954]
+3 Persiaran Rimba Permai (Cyber Heights)						[101.665379, 2.909953]
+4 Putrajaya Sentral												[101.669979, 2.931552]
+5 Persiaran Rimba Permai (Bomba)								[101.658047, 2.911719]
+6 Persiaran Multimedia (MMU)									[101.643281, 2.922602]
+7 Persiaran Bestari (Cyberia)									[101.637830, 2.925333]
