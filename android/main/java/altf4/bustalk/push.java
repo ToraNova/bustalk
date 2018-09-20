@@ -170,15 +170,22 @@ public class push extends AppCompatActivity implements View.OnClickListener {
             case R.id.btnStop:
                 //if stop button is clicked, stop location update
                 Log.d(DebugTag, "stopping location sender");
-                status.setText("");
+                status.setText("Stopped sending location");
                 locationManager = null;
                 sendHandler.removeCallbacks(sendRunnableCode);
         }
     }
 
     public void LogOut() {
-
         final TextView status = findViewById(R.id.lblOutputStatus);
+
+        //prepare the URL to push data to web server
+        String startURL = "http://" + ip_address + "/bustalk/logout.php";
+        String testURL = startURL + "?drvid=" + driver_id +
+                "&busid=" + bus_number;
+
+        //push required information to the web server
+        new NetworkManager().execute(testURL);
 
         status.setText("Logging out...");
         Log.d(DebugTag, "log out button pressed");
@@ -290,9 +297,9 @@ public class push extends AppCompatActivity implements View.OnClickListener {
 
             //prepare the URL to push data to web server
             //String startURL = "http://10.100.19.76/server.php";
-            String startURL = "http://" + ip_address + "/server.php";
+            String startURL = "http://" + ip_address + "/bustalk/server.php";
             String testURL = startURL + "?push=1&lat=" + Double.toString(latitude) +
-                    "&lng=" + Double.toString(longitude) + "&bus_id=A" + bus_number + "&driver_id=" + driver_id;
+                    "&lng=" + Double.toString(longitude) + "&bus_id=" + bus_number + "&driver_id=" + driver_id;
 
             //push required information to the web server
             new NetworkManager().execute(testURL);
@@ -301,7 +308,7 @@ public class push extends AppCompatActivity implements View.OnClickListener {
 
     private void GetRating(){
         //prepare the URL to push data to web server
-        String startURL = "http://" + ip_address + "/get_rating.php";
+        String startURL = "http://" + ip_address + "/bustalk/get_rating.php";
         String testURL = startURL + "?drvid=" + driver_id;
 
         //push required information to the web server
@@ -386,4 +393,5 @@ public class push extends AppCompatActivity implements View.OnClickListener {
             return null;
         }
     }
+
 }

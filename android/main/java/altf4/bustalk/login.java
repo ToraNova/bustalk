@@ -78,7 +78,7 @@ public class login extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 //validate input
                 int n = editable.toString().length();
-                if (n < 3 ) {
+                if (n < 4 ) {
                     bus_number_input.setError("Invalid bus number");
                     flag2 = false;
                 } else{
@@ -113,15 +113,13 @@ public class login extends AppCompatActivity {
                 Log.d(DebugTag, "log in button pressed");
                 status_text.setText("Attempt to log in");
                 if (flag1 && flag2 && flag3){
-                    status_text.setText("Log in successful");
-
                     //convert inputs to string
                     driver_id = id_input.getText().toString();
                     bus_number = bus_number_input.getText().toString();
                     ip_address = ip_address_input.getText().toString();
 
                     //prepare the URL to push data to web server
-                    String startURL = "http://" + ip_address + "/verify.php";
+                    String startURL = "http://" + ip_address + "/bustalk/verify.php";
                     String testURL = startURL + "?drvid=" + driver_id +
                             "&busid=" + bus_number;
 
