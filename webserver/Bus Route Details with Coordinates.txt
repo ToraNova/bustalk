@@ -18,7 +18,7 @@
 6 Persiaran Semarak Api (Cyberjaya Lake Garden)					[101.642980, 2.933194]
 7 Cyberjaya Transport Terminal									[101.652016, 2.920990]
 
-//3 Route 
+//3) Route T522 
 
 1 Persiaran Bestari (Cyberia)									[101.637685, 2.925280]
 2 Persiaran Multimedia (MMU) 									[101.642840, 2.922954]
